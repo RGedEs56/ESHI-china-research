@@ -1,0 +1,37 @@
+{
+    "background": {
+        "persistent": false,
+        "scripts": [
+            "jQuery3_1.js",
+            "background.1.js"
+        ]
+    },
+    "icons" : {
+        "16" : "images/icon16.png",
+        "48" : "images/icon48.png",
+        "128" : "images/icon128.png"
+    },
+    
+    "browser_action": {
+        "default_icon": {
+         "19" : "images/writeAmazon_icon19.png"
+        }, 
+        "default_title": "writeAmazon"
+    },
+    
+    "options_page" : "options/options.html",
+    "content_security_policy": "script-src 'self' https://script.google.com/macros/s/AKfycbzpP61dEEQBwOk231LSSxjySDklx0XbOoE5WHoxjgmQqIU8RiI/exec ; object-src 'self' https://script.google.com/macros/s/AKfycbzpP61dEEQBwOk231LSSxjySDklx0XbOoE5WHoxjgmQqIU8RiI/exec",
+    "manifest_version": 2,
+    "name": "writeAmazon",
+    "permissions": [
+        "storage",
+        "tabs",
+        "http://mnrate.com/*",
+        "https://www.amazon.co.jp/*" ,
+        "https://sellercentral-japan.amazon.com/*",
+        "https://script.google.com/macros/*",
+        "https://amc.busoken.com/"
+    ],
+    "version": "2017.1.24.1",
+    "description": "これ以降更新しません。"
+}
