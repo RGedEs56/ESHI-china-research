@@ -1,30 +1,3 @@
 var $;
-
-$(function() {
-    var ASIN = prompt("計算したい商品のASINを入力してください");
-    var now_price = prompt("現在のAmazonの販売価格を入力してください");
-    var old_sell_price = prompt("オートマスターショップで販売したときの1個あたりの販売価格を入力してください(Paypal手数料込で入力してください)");
-
-    var clickWait = function(targetSelecter, time) {
-        var d1 = $.Deferred();
-        $(targetSelecter).trigger('click');
-        setTimeout(function() {
-            d1.resolve();
-        }, time);
-        return d1.promise();
-    };
-
-    $('#search-string').val(ASIN);
-    clickWait('.a-button-input:first', 1000)
-        .then(function() {
-            $('#afn-pricing').val(now_price);
-            return clickWait('#update-fees-link', 2000);
-        })
-        .then(function() {
-            var profit = $('#afn-seller-proceeds').val();
-            console.log(profit);
-            var r_price = old_sell_price - (profit - Math.ceil(now_price * 0.2));
-            console.log(r_price);
-            alert('差額は ' + r_price + '円です');
-        });
-}());
+$(function(){var d=prompt("\u8a08\u7b97\u3057\u305f\u3044\u5546\u54c1\u306eASIN\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044"),c=prompt("\u73fe\u5728\u306eAmazon\u306e\u8ca9\u58f2\u4fa1\u683c\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044"),e=prompt("\u30aa\u30fc\u30c8\u30de\u30b9\u30bf\u30fc\u30b7\u30e7\u30c3\u30d7\u3067\u8ca9\u58f2\u3057\u305f\u3068\u304d\u306e1\u500b\u3042\u305f\u308a\u306e\u8ca9\u58f2\u4fa1\u683c\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044(Paypal\u624b\u6570\u6599\u8fbc\u3067\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044)"),b=
+function(a,c){var b=$.Deferred();$(a).trigger("click");setTimeout(function(){b.resolve()},c);return b.promise()};$("#search-string").val(d);b(".a-button-input:first",1E3).then(function(){$("#afn-pricing").val(c);return b("#update-fees-link",2E3)}).then(function(){var a=$("#afn-seller-proceeds").val();console.log(a);a=e-(a-Math.ceil(.2*c));console.log(a);alert("\u5dee\u984d\u306f "+a+"\u5186\u3067\u3059")})}());

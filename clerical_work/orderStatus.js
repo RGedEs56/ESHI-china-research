@@ -1,18 +1,2 @@
 var $;
-$(function(){
-var imput = window.prompt("変更したいオーダー番号をカンマで区切って入力");
-var orderNumberArray = imput.split(",");
-var changeNumber = "";
-var errorNumber = "";
-for (var i = orderNumberArray.length - 1; i >= 0; i--) {
-    var orderNumber = orderNumberArray[i];
-    var id = "cb-select-" + orderNumber;
-    try {
-        document.getElementById(id).checked = true;
-        changeNumber += orderNumber + ",";
-    } catch (e) {
-        errorNumber += orderNumber + ",";
-    }
-}
-alert('チェックを入れたオーダー番号\n' + changeNumber + '\n\n見つからなかったオーダー番号\n' + errorNumber);
-    })
+$(function(){for(var c=window.prompt("\u5909\u66f4\u3057\u305f\u3044\u30aa\u30fc\u30c0\u30fc\u756a\u53f7\u3092\u30ab\u30f3\u30de\u3067\u533a\u5207\u3063\u3066\u5165\u529b").split(","),d="",e="",a=c.length-1;0<=a;a--){var b=c[a],f="cb-select-"+b;try{document.getElementById(f).checked=!0,d+=b+","}catch(g){e+=b+","}}alert("\u30c1\u30a7\u30c3\u30af\u3092\u5165\u308c\u305f\u30aa\u30fc\u30c0\u30fc\u756a\u53f7\n"+d+"\n\n\u898b\u3064\u304b\u3089\u306a\u304b\u3063\u305f\u30aa\u30fc\u30c0\u30fc\u756a\u53f7\n"+e)});
