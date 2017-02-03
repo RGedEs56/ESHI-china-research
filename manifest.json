@@ -14,15 +14,15 @@
     
     "browser_action": {
         "default_icon": {
-         "19" : "images/writeAmazon_icon19.png"
+         "19" : "images/fujiesan19.png"
         }, 
-        "default_title": "writeAmazon"
+        "default_title": "ESHI china research"
     },
     
     "options_page" : "options/options.html",
     "content_security_policy": "script-src 'self' https://script.google.com/macros/s/AKfycbzpP61dEEQBwOk231LSSxjySDklx0XbOoE5WHoxjgmQqIU8RiI/exec ; object-src 'self' https://script.google.com/macros/s/AKfycbzpP61dEEQBwOk231LSSxjySDklx0XbOoE5WHoxjgmQqIU8RiI/exec",
     "manifest_version": 2,
-    "name": "writeAmazon",
+    "name": "ESHI china research",
     "permissions": [
         "storage",
         "tabs",
@@ -32,6 +32,6 @@
         "https://script.google.com/macros/*",
         "https://amc.busoken.com/"
     ],
-    "version": "2017.1.24.1",
+    "version": "2017.1.24.2",
     "description": "これ以降更新しません。"
 }
