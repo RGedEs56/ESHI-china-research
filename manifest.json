@@ -29,9 +29,8 @@
         "http://mnrate.com/*",
         "https://www.amazon.co.jp/*" ,
         "https://sellercentral-japan.amazon.com/*",
-        "https://script.google.com/macros/*",
-        "https://amc.busoken.com/"
+        "https://script.google.com/macros/*"
     ],
-    "version": "2017.1.24.2",
+    "version": "2017.3.13.1",
     "description": "これ以降更新しません。"
 }
