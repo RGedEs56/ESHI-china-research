@@ -16,7 +16,7 @@ $(function() {
                     pageResponse: a
                 })    
             }    
-        },100000)
+        },10000)
         
         console.log(a);
         var c = function(a, c) {
@@ -30,16 +30,16 @@ $(function() {
             document.getElementById("search-string").value = a.asin, c(".a-button-input:first", 1E3)
             .then(function(){
                var def = $.Deferred();
-                if($("#a-popover-header-2")){
-                    for(var i = 0,pro = $(".product");i < pro.length;i++){
-                        if($(pro[i]).find(".txtsmall:first").text() === a.title){
-                            pro[i].find("Select:first").trigger("click");
+                if(document.getElementById("a-popover-header-2")){
+                    for(var i = 0,pro = document.getElementsByClassName("product");i < pro.length;i++){
+                        if(pro[i].getElementsByClassName("txtsmall")[0].textContent.replace(/^\s*|\s*$/g, "") === a.title){
+                            pro[i].getElementsByTagName("button")[0].click();
                             def.resolve();
                             break;
-                        } else {
-                            def.resolve();    
                         }  
                     }       
+                } else {
+                    def.resolve();    
                 }
                 return def.promise();
             })
