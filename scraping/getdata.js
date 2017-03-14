@@ -23,7 +23,7 @@ $(function() {
             ranking: a && a.match(/\d+\u4f4d/) ? a.replace(/\,/,"").match(/\d+\u4f4d/)[0].replace("\u4f4d", "") : "\u53d6\u5f97\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f"
         };
         try {
-            a.cartPrice = new Number($("#priceblock_ourprice").text().match(/\d+/)[0])
+            a.cartPrice = new Number($("#priceblock_ourprice").text().replace(",","").match(/\d+/)[0])
         } catch (c) {
             a.cartPrice = 0
         }

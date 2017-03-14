@@ -18,6 +18,7 @@ $(function() {
             }    
         },10000)
         
+        setTimeout(function(){
         console.log(a);
         var c = function(a, c) {
             var b = $.Deferred();
@@ -62,6 +63,7 @@ $(function() {
                 chrome.runtime.sendMessage({
                     pageResponse: b
                 })
-            })
+            })    
+        },0);
     })
 });
