@@ -16,7 +16,7 @@ $(function() {
                     pageResponse: a
                 })    
             }    
-        },10000)
+        },15000)
         
         setTimeout(function(){
         console.log(a);
@@ -64,6 +64,6 @@ $(function() {
                     pageResponse: b
                 })
             })    
-        },0);
+        },1000);
     })
 });
