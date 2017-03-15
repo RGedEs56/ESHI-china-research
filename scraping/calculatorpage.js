@@ -20,23 +20,17 @@ $(function() {
             }, c);
             return b.promise()
         };
-            document.getElementById("search-string").value = a.asin, c(".a-button-input:first", 1E3)
-            .then(function(){
-               var def = $.Deferred();
+            document.getElementById("search-string").value = a.asin;
+            c(".a-button-input:first", 1E3)
+            .then(function() {
                 if(document.getElementById("a-popover-header-2")){
                     for(var i = 0,pro = document.getElementsByClassName("product");i < pro.length;i++){
                         if(pro[i].getElementsByClassName("txtsmall")[0].textContent.replace(/^\s*|\s*$/g, "") === a.title){
                             pro[i].getElementsByTagName("button")[0].click();
-                            def.resolve();
                             break;
                         }  
-                    }       
-                } else {
-                    def.resolve();    
+                    }
                 }
-                return def.promise();
-            })
-            .then(function() {
                 $("#afn-pricing").val(a.cartPrice);
                 return c("#update-fees-link", 2E3)
             }).then(function() {
