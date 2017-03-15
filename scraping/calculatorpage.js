@@ -9,16 +9,8 @@ $(function() {
         a.want_itemData = !1;
         a.nextActionName = "monorate";
         
-        var isError = true;
         setTimeout(function(){
-            if(isError){
-                a.totalcost = "\u53d6\u5f97\u5931\u6557", chrome.runtime.sendMessage({
-                    pageResponse: a
-                })    
-            }    
-        },15000)
-        
-        setTimeout(function(){
+            try{
         console.log(a);
         var c = function(a, c) {
             var b = $.Deferred();
@@ -59,11 +51,16 @@ $(function() {
                         totalcost: a.cartPrice - new Number(document.getElementById("afn-seller-proceeds").value)
                     },
                     b = Object.assign(a, b);
-                    isError = false;
                 chrome.runtime.sendMessage({
                     pageResponse: b
                 })
-            })    
+            })
+            } catch(err) {
+                console.log(err);
+                a.totalcost = "\u53d6\u5f97\u5931\u6557", chrome.runtime.sendMessage({
+                    pageResponse: a
+                })     
+            }
         },1000);
     })
 });
