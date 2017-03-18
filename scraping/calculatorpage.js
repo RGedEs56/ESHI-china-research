@@ -10,20 +10,24 @@ $(function() {
         a.nextActionName = "monorate";
         
         setTimeout(function(){
-            try{
+        try{
         console.log(a);
         var c = function(a, c) {
+            console.log("click start time=" + c);
             var b = $.Deferred();
             $(a).trigger("click");
             setTimeout(function() {
                 b.resolve()
             }, c);
             return b.promise()
-        };
+        };  
+            console.log("set ASIN");
             document.getElementById("search-string").value = a.asin;
+            console.log("click1")
             c(".a-button-input:first", 1E3)
             .then(function() {
                 if(document.getElementById("a-popover-header-2")){
+                    console.log("Act popover Action");
                     for(var i = 0,pro = document.getElementsByClassName("product");i < pro.length;i++){
                         if(pro[i].getElementsByClassName("txtsmall")[0].textContent.replace(/^\s*|\s*$/g, "") === a.title){
                             pro[i].getElementsByTagName("button")[0].click();
@@ -32,8 +36,10 @@ $(function() {
                     }
                 }
                 $("#afn-pricing").val(a.cartPrice);
+                console.log("click2");
                 return c("#update-fees-link", 2E3)
             }).then(function() {
+                console.log("click3");
                 document.getElementById("afn-amazon-fulfillment-fees").click();
                 var b = {
                         weight: $("#product-info-weight").text(),
@@ -45,6 +51,7 @@ $(function() {
                         totalcost: a.cartPrice - new Number(document.getElementById("afn-seller-proceeds").value)
                     },
                     b = Object.assign(a, b);
+                    console.log("postMessage");
                 chrome.runtime.sendMessage({
                     pageResponse: b
                 })
