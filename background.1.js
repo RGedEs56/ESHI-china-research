@@ -100,9 +100,9 @@ try {
         if (C_win) confirm("\u5b9f\u884c\u4e2d\u3067\u3059\u3002\u4e2d\u65ad\u3057\u307e\u3059\u304b\uff1f") && stop();
         else if (chrome.windows.getCurrent({}, function(a) {
                 C_win = a.id
-            }), itemData = {}, winIds = [], a.url.match(/https\:\/\/www\.amazon\.co\.jp\/.*dp\//)) executeScriptWithjQuery(a.id, "scraping/getdata.js");
+            }), itemData = {}, winIds = [], a.url.match(/https\:\/\/www\.amazon\.co\.jp\/.*dp\/ | https\:\/\/www\.amazon\.co\.jp\/.*gp\/product\//)) executeScriptWithjQuery(a.id, "scraping/getdata.js");
         else if (-1 !== a.url.indexOf("mnrate.com")) executeScriptWithjQuery(a.id, "scraping/only_monorate.js");
-        else if (a.url.match(/https\:\/\/www\.amazon\.co\.jp\/.*marketplaceID\=.*/) || a.url.match(/https\:\/\/www\.amazon\.co\.jp\/.*keywords\=.*/)) executeScriptWithjQuery(a.id, "scraping/getProducts.js");
+        else if (a.url.match(/https\:\/\/www\.amazon\.co\.jp\/.*[\?\&]me\=.*/) || a.url.match(/https\:\/\/www\.amazon\.co\.jp\/.*keywords\=.*/)) executeScriptWithjQuery(a.id, "scraping/getProducts.js");
         else {
             var a = prompt("\u4e00\u62ec\u3067\u5165\u529b\u3057\u305f\u3044ASIN\u3092\n\u30ab\u30f3\u30de(,)\n\u6539\u884c\n\u30b9\u30da\u30fc\u30b9\n\u306e\u3044\u305a\u308c\u304b\u3067\u533a\u5207\u3063\u3066\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044");
             a && (a = a.replace(/[,\s]/g, "\n"), confirm("\u5165\u529b\u3057\u305fASIN\u4e00\u89a7\n\n" + a + "\n\n\u3053\u308c\u3089\u3092\u30b7\u30fc\u30c8\u306b\u8a18\u5165\u3057\u307e\u3059\u304b\uff1f\n\n\u203b\u5168\u3066\u8a18\u5165\u5b8c\u4e86\u307e\u3067\u306b" + Math.ceil(20 * a.split(/\n/).length / 60) + "\u5206\u7a0b\u304b\u304b\u308a\u307e\u3059\u3002\u3054\u6ce8\u610f\u304f\u3060\u3055\u3044\u3002")) ? (Asins = a.split(/\n/), al = 0, openPage()) : C_win = null;
