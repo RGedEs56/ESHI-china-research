@@ -1,4 +1,14 @@
 var $, chrome;
+var timeoutId = setTimeout(function(){
+    chrome.runtime.sendMessage({
+            pageResponse: {
+                fba_totalcost : "timeout",
+                want_itemData: !1,
+                nextActionName: "monorate",
+                }
+        });
+    },15000);
+
 $(function() {
     chrome.runtime.sendMessage({
         pageResponse: {
@@ -27,12 +37,12 @@ $(function() {
             c(".a-button-input:first", 1E3)
             .then(function() {
                 if(document.getElementById("a-popover-header-2")){
-                    console.log("Act popover Action");
                     for(var i = 0,pro = document.getElementsByClassName("product");i < pro.length;i++){
                         if(pro[i].getElementsByClassName("txtsmall")[0].textContent.replace(/^\s*|\s*$/g, "") === a.title){
                             pro[i].getElementsByTagName("button")[0].click();
                             break;
-                        }  
+                        }
+                        if(i === pro.length-1){ pro[0].getElementsByTagName("button")[0].click();}
                     }
                 }
                 $("#afn-pricing").val(a.cartPrice);
@@ -43,22 +53,23 @@ $(function() {
                 document.getElementById("afn-amazon-fulfillment-fees").click();
                 var b = {
                         weight: $("#product-info-weight").text(),
-                        length: $("#product-info-length").text(),
+                        leng: $("#product-info-length").text(),
                         width: $("#product-info-width").text(),
                         height: $("#product-info-height").text(),
                         cost: $("#afn-selling-fees").text(),
                         packege: $("#afn-weight-handling-fee").val(),
-                        totalcost: a.cartPrice - new Number(document.getElementById("afn-seller-proceeds").value)
-                    },
-                    b = Object.assign(a, b);
-                    console.log("postMessage");
+                        fba_totalcost: a.cartPrice - new Number(document.getElementById("afn-seller-proceeds").value)
+                    };
+                    b.volume_weight = b.leng * b.width * b.height / 5000;
+                    b.true_weight = Math.ceil(Math.max(b.weight,b.volume_weight)*10)/10;
                 chrome.runtime.sendMessage({
                     pageResponse: b
                 })
+                clearTimeout(timeoutId);
             })
             } catch(err) {
                 console.log(err);
-                a.totalcost = "\u53d6\u5f97\u5931\u6557", chrome.runtime.sendMessage({
+                a.fba_totalcost = "\u53d6\u5f97\u5931\u6557", chrome.runtime.sendMessage({
                     pageResponse: a
                 })     
             }
