@@ -1,28 +1,31 @@
-var chrome, $, itemData = {},
+var chrome, $;
+var itemData = {},
+    itemDataArr = [],
     winIds = [],
-    Asins = null,
     al = 0,
-    C_win = null;
-try {
+    Asins,
+    C_win;
+    
     var stop = function() {
+        console.log(Asins);
+        console.log(al);
+        if(Asins && Asins.length > al){
+            for(var text = "";al < Asins.length;al++){ text += (Asins[al] + '\n') ; }
+            prompt("今回記入しなかったデータ一覧(このままコピーできます)",text);
+        }
             C_win = Asins = null;
             al = 0;
             itemData = {};
-            for (var a = 0; a < winIds.length; a++) try {
-                chrome.tabs.remove(winIds[a])
-            } catch (b) {
-                console.log(b)
-            }
+            for (var a = 0; a < winIds.length; a++) try { chrome.tabs.remove(winIds[a]) } catch (b) { console.log("") }
             winIds = []
         },
         executeScriptWithjQuery = function(a, b) {
-            chrome.tabs.executeScript(a, {
-                file: "jQuery3_1.js"
-            }, function(c) {
-                chrome.tabs.executeScript(a, {
-                    file: b
-                })
-            })
+            chrome.tabs.executeScript(a, {  file: "jQuery3_2.js" });
+            if(b !== "scraping/getdata.js"){
+            chrome.tabs.executeScript(a, { file : "spin.min.js" });
+            chrome.tabs.executeScript(a, { file: "spin_start.js" });
+            }
+            chrome.tabs.executeScript(a, { file: b });
         },
         openPage = function() {
             chrome.tabs.create({
@@ -44,17 +47,19 @@ try {
                     executeScriptWithjQuery(a.id, b);
                     c.resolve(a)
                 })
-            } catch (d) {
-                c.reject("test_Deferred\u306b\u3066\u30a8\u30e9\u30fc\n" + d)
-            }
+            } catch (d) { c.reject("Error test_Deferred\n" + d) }
             return c.promise()
         },
-        nextAsin = function(a){
-                Asins ? (al++, al <= Asins.length - 1 ? setTimeout(openPage,
-                            1E4 * Math.random()) : (alert("\u5168\u3066\u306eASIN\u306e\u8a18\u5165\u304c\u5b8c\u4e86\u3057\u307e\u3057\u305f"), console.log(a), stop())) : (alert(a), stop())
+        nextAsin = function(){
+                if(Asins && ++al < Asins.length){
+                    setTimeout(openPage,1E4 * Math.random())
+                } else {
+                    alert("Complite All Asin");
+                    stop() 
+                };
             },
         lastAction = function() {
-            if (void 0 !== itemData.fba_totalcost && void 0 !== itemData.monthly_sales && void 0 !== itemData.fba_seller) {
+            if (itemData.fba_totalcost && itemData.monthly_sales && itemData.fba_seller || itemData.fba_seller === 0) {
                 chrome.storage.sync.get("SpreadsheetId", function(c) {
                     if (c) {
                         itemData.SpreadsheetId = c.SpreadsheetId;
@@ -62,37 +67,21 @@ try {
                         alert('オプション画面にてスプレッドシートIDが入力されていません');
                         return stop();
                     }
-                    console.log("\u6700\u7d42\u30c7\u30fc\u30bf");
+                    console.log("last data");
                     console.log(itemData);
-                    // for (var o in itemData) URL += "&" + o + "=" + itemData[o];
-                    // console.log(URL)
-                    // chrome.tabs.create({
-                    //     url: URL,
-                    //     active: true,
-                    // }, function(a) {
-                    //     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-                    //         if (tabId === a.id && tab.status === 'complete') {
-                    //             winIds.push(a.id);
-                    //             for (var a = 0; a < winIds.length; a++) chrome.tabs.remove(winIds[a]);
-                    //             itemData = {};
-                    //             Asins ? (al++, al <= Asins.length - 1 ? setTimeout(openPage,
-                    //                 1E4 * Math.random()) : (alert("\u5168\u3066\u306eASIN\u306e\u8a18\u5165\u304c\u5b8c\u4e86\u3057\u307e\u3057\u305f"), console.log(a), stop())) : (alert(a), stop())
-                    //         }
-                    //     })
-                    // });
-
-                    for (var a = 0; a < winIds.length; a++) chrome.tabs.remove(winIds[a]);
+                    for (var a = 0; a < winIds.length; a++) try { chrome.tabs.remove(winIds[a]) } catch (b) { console.log("") }
                     winIds = [];
                     $.ajax({
                         type: "GET",
                         url: "https://script.google.com/macros/s/AKfycbzgP7IURaj1kQwU84EbgIq3iYXjcDayl9CQ_eT7ku5ZuoZufVg/exec",
                         cache: !0,
                         data: itemData,
-                        timeout: 1E4
-                    }).always(function(a) {
-                        itemData = {};
-                        nextAsin(a);
-                    })
+                        timeout: 30000
+                    }).always(function(data){
+                        console.log("send complite" + data);
+                    });
+                    itemData = {};
+                    nextAsin();
                 })
             }
         }
@@ -100,10 +89,10 @@ try {
 
 
     chrome.browserAction.onClicked.addListener(function(a) {
-        if (C_win) confirm("\u5b9f\u884c\u4e2d\u3067\u3059\u3002\u4e2d\u65ad\u3057\u307e\u3059\u304b\uff1f") && stop();
+        if (C_win) confirm("中止しますか？") && stop();
         else if (chrome.windows.getCurrent({}, function(a) {
                 C_win = a.id
-            }), itemData = {}, winIds = [], a.url.match(/https\:\/\/www\.amazon\.co\.jp\/.*dp\/|https\:\/\/www\.amazon\.co\.jp\/.*gp\/product\//)) executeScriptWithjQuery(a.id, "scraping/getdata.js");
+            }), itemData = {}, winIds = [], a.url.match(/https\:\/\/www\.amazon\.co\.jp\/.*dp\/|https\:\/\/www\.amazon\.co\.jp\/.*gp\/product\/|https\:\/\/www\.amazon\.co\.jp\/.*o\/ASIN\//)) executeScriptWithjQuery(a.id, "scraping/getdata.js");
         else if (-1 !== a.url.indexOf("mnrate.com")) executeScriptWithjQuery(a.id, "scraping/only_monorate.js");
         else if (a.url.match(/https\:\/\/www\.amazon\.co\.jp\/.*[\?\&]me\=.*|https\:\/\/www\.amazon\.co\.jp\/.*keywords\=.*|https\:\/\/www\.amazon\.co\.jp\/.*marketplaceID\=/)) executeScriptWithjQuery(a.id, "scraping/getProducts.js");
         else {
@@ -112,12 +101,15 @@ try {
         }
     });
     chrome.runtime.onMessage.addListener(function(a, b, c) {
+        try {
         a.pageResponse.want_itemData ? c({
                 itemData: itemData
             }) :
-            (itemData = Object.assign(itemData, a.pageResponse), "stop" === itemData.nextActionName ? stop() : "sellerCheck" === itemData.nextActionName ? (itemData.nextActionName = null, console.log("start"), test_Deferred("https://www.amazon.co.jp/gp/offer-listing/" + itemData.asin + "/ref=olp_f_new?ie=UTF8&f_new=true&f_primeEligible=true&shipPromoFilter=1", "scraping/sellerCheck.js"), test_Deferred("http://mnrate.com/item/aid/" + itemData.asin, "scraping/monorate.js")) : "calc" === itemData.nextActionName ? (console.log("calc"), test_Deferred("https://sellercentral-japan.amazon.com/fba/profitabilitycalculator/index?lang=ja_JP&asin=" +
-                itemData.asin, "scraping/calculatorpage.js")) : "openPage" === itemData.nextActionName && (itemData.nextActionName = null, Asins = itemData.Asins, al = 0, openPage()), lastAction())
-    })
+            (itemData = Object.assign(itemData, a.pageResponse), "stop" === itemData.nextActionName ? stop() 
+            : "sellerCheck" === itemData.nextActionName ? (itemData.nextActionName = null, console.log("start"),test_Deferred("http://mnrate.com/item/aid/" + itemData.asin, "scraping/monorate.js") ,test_Deferred("https://www.amazon.co.jp/gp/offer-listing/" + itemData.asin + "/ref=olp_f_new?ie=UTF8&f_new=true&f_primeEligible=true&shipPromoFilter=1", "scraping/sellerCheck.js")) 
+            : "calc" === itemData.nextActionName ? (console.log("calc"), test_Deferred("https://sellercentral-japan.amazon.com/fba/profitabilitycalculator/index?lang=ja_JP&asin=" + itemData.asin, "scraping/calculatorpage.js")) 
+            : "openPage" === itemData.nextActionName && (itemData.nextActionName = null, Asins = itemData.Asins, al = 0, openPage()), lastAction())
 } catch (a) {
     console.log(a), alert(a)
 }
+})

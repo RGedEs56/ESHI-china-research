@@ -1,13 +1,18 @@
 var $, chrome;
-var timeoutId = setTimeout(function(){
+var send_default = function(){
     chrome.runtime.sendMessage({
             pageResponse: {
                 fba_totalcost : "timeout",
                 want_itemData: !1,
                 nextActionName: "monorate",
-                }
-        });
-    },15000);
+                }    
+    })
+}
+
+try{
+var timeoutId = setTimeout(function(){
+        send_default();
+    },7000);
 
 $(function() {
     chrome.runtime.sendMessage({
@@ -34,7 +39,7 @@ $(function() {
             console.log("set ASIN");
             document.getElementById("search-string").value = a.asin;
             console.log("click1")
-            c(".a-button-input:first", 1E3)
+            c(".a-button-input:first", 1500)
             .then(function() {
                 if(document.getElementById("a-popover-header-2")){
                     for(var i = 0,pro = document.getElementsByClassName("product");i < pro.length;i++){
@@ -62,6 +67,7 @@ $(function() {
                     };
                     b.volume_weight = b.leng * b.width * b.height / 5000;
                     b.true_weight = Math.ceil(Math.max(b.weight,b.volume_weight)*10)/10;
+                    b = Object.assign(a,b);//must
                 chrome.runtime.sendMessage({
                     pageResponse: b
                 })
@@ -69,10 +75,11 @@ $(function() {
             })
             } catch(err) {
                 console.log(err);
-                a.fba_totalcost = "\u53d6\u5f97\u5931\u6557", chrome.runtime.sendMessage({
+                a.fba_totalcost = "error", chrome.runtime.sendMessage({
                     pageResponse: a
                 })     
             }
         },1000);
     })
 });
+} catch(e) { send_default()}

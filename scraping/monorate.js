@@ -1,13 +1,18 @@
 var chrome, $;
-var timeoutId = setTimeout(function(){
+
+var send_default = function(){
     chrome.runtime.sendMessage({
             pageResponse: {
                 monthly_sales : "timeout",
                 want_itemData: !1,
                 nextActionName: "writeSheet",
                 }
-        });
-    },15000);
+        });     
+}
+
+var timeoutId = setTimeout(function(){
+        send_default();
+    },7000);
     
 $(function() {
     chrome.runtime.sendMessage({
